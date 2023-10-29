@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Razorpay Web Integration</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #2300a3;
+        }
+
+        .product-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+        }
+
+        .product {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        .product img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .product p {
+            margin: 10px 0;
+        }
+
+        .pay-form input[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .pay-form input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Razorpay Web Integration</h1>
+    <div class="product-container">
+        <div class="product">
+            <img src="https://cdn.pixabay.com/photo/2014/04/03/10/55/t-shirt-311732_960_720.png" alt="Shirt">
+            <p>Shirt</p>
+            <p><b>Amount: Rs. 500</b></p>
+            <form class="pay-form">
+                <input type="hidden" name="name" value="Shirt">
+                <input type="hidden" name="amount" value="500">
+                <input type="hidden" name="description" value="Shirt Buying">
+                <input type="submit" value="Pay Now">
+            </form>
+        </div>
+
+        <div class="product">
+            <img src="https://cdn.pixabay.com/photo/2013/07/12/18/20/shoes-153310_960_720.png" alt="Shoes">
+            <p>Shoes</p>
+            <p><b>Amount: Rs. 1500</b></p>
+            <form class="pay-form">
+                <input type="hidden" name="name" value="Shoes">
+                <input type="hidden" name="amount" value="1500">
+                <input type="hidden" name="description" value="Shoes Buying">
+                <input type="submit" value="Pay Now">
+            </form>
+        </div>
+
+        <div class="product">
+            <img src="https://m.media-amazon.com/images/I/919lNOaU-GL._UY879_.jpg" alt="Dress">
+            <p>Dress</p>
+            <p><b>Amount: Rs. 1200</b></p>
+            <form class="pay-form">
+                <input type="hidden" name="name" value="Dress">
+                <input type="hidden" name="amount" value="1200">
+                <input type="hidden" name="description" value="Dress Buying">
+                <input type="submit" value="Pay Now">
+            </form>
+        </div>
+    </div>
+<script>
+	
+</script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.pay-form').submit(function (e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: "/createOrder",
+                    type: "POST",
+                    data: formData,
+                    success: function (res) {
+                        if (res.success) {
+                            var options = {
+                                "key": "" + res.key_id + "",
+                                "amount": "" + res.amount + "",
+                                "currency": "INR",
+                                "name": "" + res.product_name + "",
+                                "description": "" + res.description + "",
+                                "image": "https://avatars.githubusercontent.com/u/112754760?v=4",
+                                "order_id": "" + res.order_id + "",
+                                "handler": function (response) {
+                                    alert("Payment Succeeded");
+                                    // window.open("/","_self")
+                                },
+                                "prefill": {
+                                    "contact": "" + res.contact + "",
+                                    "name": "" + res.name + "",
+                                    "email": "" + res.email + ""
+                                },
+                                "notes": {
+                                    "description": "" + res.description + ""
+                                },
+                                "theme": {
+                                    "color": "#2300a3"
+                                }
+                            };
+                            var razorpayObject = new Razorpay(options);
+                            razorpayObject.on('payment.failed', function (response) {
+                                alert("Payment Failed");
+                            });
+                            razorpayObject.open();
+                        } else {
+                            alert(res.msg);
+                        }
+                    }
+                })
+            });
+        });
+    </script>
+</body>
+
+</html>
