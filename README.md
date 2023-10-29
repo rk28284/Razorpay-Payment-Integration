@@ -1,5 +1,14 @@
 # Razorpay-Payment-Integration
 This repository demonstrates a web integration example using Razorpay for online payments. . Users can select a product, proceed to payment, and complete the transaction using Razorpay's payment gateway.
+## Technologies Used
+
+- HTML
+- CSS
+- JavaScript
+- node
+- Express
+- Mongoose
+- [Razorpay API](https://razorpay.com/docs/payment-gateway/web-integration/standard/)
 
 ![Screenshot (312)](https://github.com/rk28284/Razorpay-Payment-Integration/assets/112754760/0b34fb8b-1b65-4c6d-a5d9-68188f0ff5a0)
 
